@@ -149,6 +149,7 @@ main:
         loadn r2, #0	
 
         Loop:
+
             call Placar
 
             loadn r1, #2
@@ -228,10 +229,24 @@ main:
 
             call Delay
 
+            loadn r1, #100
+            mod r1, r0, r1
+            cmp r1, r2
+            jeq TiraBonus
+
             inc r0 	        ;contador++
             
             jmp Loop
-	
+
+    TiraBonus:
+        load r1, Bonus
+        loadn r7, #1
+        sub r1, r1, r7
+        store Bonus, r1
+        
+        inc r0
+        jmp Loop
+
     fim:
         call ApagaTela
 
