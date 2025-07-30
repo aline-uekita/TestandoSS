@@ -86,6 +86,9 @@ FlagColuna: var #40 ;inicializa no zero == flag desligada
 
 posSimoes: var #1
 posAntSimoes: var #1
+FlagPulo1: var #1
+FlagVolta1: var #1
+FlagVolta2: var #1
 
 Msn0: string "BONUS"
 Msn1: string "SCORE"
@@ -229,7 +232,7 @@ main:
 
             call Delay
 
-            loadn r1, #100
+            loadn r1, #10
             mod r1, r0, r1
             cmp r1, r2
             jeq TiraBonus
@@ -240,7 +243,7 @@ main:
 
     TiraBonus:
         load r1, Bonus
-        loadn r7, #1
+        loadn r7, #100
         sub r1, r1, r7
         store Bonus, r1
         
@@ -292,6 +295,10 @@ Inicializacao:
 
         cmp r3, r2
         jne LoopFlagColuna0
+
+    store FlagPulo1, r1
+    store FlagVolta1, r1
+    store FlagVolta2, r1
 
     loadn r0, #Bonus
     loadn r1, #10000
@@ -399,6 +406,21 @@ MoveSimoes:
 
     call Suicidou
 
+    load r0, FlagVolta2
+    loadn r1, #1
+    cmp r1, r0
+    ceq Volta2
+
+    load r0, FlagVolta1
+    loadn r1, #1
+    cmp r1, r0
+    ceq Volta1    
+
+    load r0, FlagPulo1 
+    loadn r1, #1
+    cmp r1, r0
+    ceq Pulando
+
 	call MoveSimoes_RecalculaPos		;Recalcula Posicao do Simoes
 
     ;Só apaga e Redesenha se (pos != posAnt), para não ficar piscando o Simões
@@ -417,6 +439,78 @@ MoveSimoes:
         pop r1
         pop r0
         rts
+
+Pulando:
+    push r0
+    push r1
+
+    call Delay
+
+    load r0, posSimoes
+    loadn r1, #40
+
+    sub r0, r0, r1
+    store posSimoes, r0
+
+    call ApagaSimoes
+    call DesenhaSimoes
+
+    loadn r1, #0
+    store FlagPulo1, r1
+
+    loadn r1, #1
+    store FlagVolta1, r1
+
+    pop r1
+    pop r0
+    rts
+
+Volta1:
+    push r0
+    push r1
+
+    call Delay
+
+    load r0, posSimoes
+    loadn r1, #40
+
+    add r0, r0, r1
+    store posSimoes, r0
+
+    call ApagaSimoes
+    call DesenhaSimoes
+
+    loadn r1, #0
+    store FlagVolta1, r1
+
+    loadn r1, #1
+    store FlagVolta2, r1
+
+    pop r1
+    pop r0
+    rts
+
+Volta2:
+    push r0
+    push r1
+
+    call Delay
+
+    load r0, posSimoes
+    loadn r1, #40
+
+    add r0, r0, r1
+    store posSimoes, r0
+
+    call ApagaSimoes
+    call DesenhaSimoes
+
+    loadn r1, #0
+    store FlagVolta2, r1
+
+    pop r1
+    pop r0
+    rts
 
 MoveSimoes_RecalculaPos:
     push r0
@@ -457,7 +551,7 @@ MoveSimoes_RecalculaPos:
     ;Case 5
     loadn r2, #32
     cmp r1, r2
-    ;ceq Morreu
+    jeq MoveSimoes_RecalculaPos_E
 
     StoreposSimoes:
         store posSimoes, r0
@@ -475,11 +569,6 @@ MoveSimoes_RecalculaPos:
 
     ;Move para a esquerda 
     MoveSimoes_RecalculaPos_A:
-        inchar r1
-        loadn r2, #32
-        cmp r2, r1
-        jeq Morreu
-
         ;Verifica se está na parede
         loadn r1, #40
         loadn r2, #0
@@ -711,6 +800,36 @@ MoveSimoes_RecalculaPos:
             add r0, r0, r2 ;sobe 1 linha
             jmp StoreposSimoes
 
+    MoveSimoes_RecalculaPos_E:
+        ;Verifica onde ele está
+            loadn r1, #40
+            mod r2, r0, r1     ; r2 = coluna atual
+            div r3, r0, r1     ; r3 = linha atual
+
+            ; calcula deslocamento: linha * 41 + coluna
+            loadn r4, #41
+            mul r3, r3, r4     ; r3 = linha * 41
+            add r3, r3, r2     ; r3 = deslocamento total (linha*41 + coluna)
+            add r3, r3, r4     ;Simões + 41 (40 da linha + '0')
+            loadn r4, #tela0Linha0
+            add r3, r4, r3     ; r3 = endereço final de embaixo do Simões
+            loadi r6, r3       ; lê caractere da direita com a cor  
+            loadn r7, #255
+            and r6, r6, r7
+
+            ;Confere se tem chão para pularr
+            loadn r5, #'='
+            cmp r5, r6
+            jne RtsMoveSimoes_RecalculaPos
+
+            sub r0, r0, r1 ; Sobe 1 linha 
+            store posSimoes, r0
+            
+            loadn r1, #1
+            store FlagPulo1, r1
+
+            jmp RtsMoveSimoes_RecalculaPos
+            
 ;--------------------------------------------
 ;                 Venceu
 ;--------------------------------------------
@@ -1487,7 +1606,7 @@ tela1Linha21 : string "                                        "
 tela1Linha22 : string "   ==================================   "
 tela1Linha23 : string "                                        "
 tela1Linha24 : string "                                        "
-tela1Linha25 : string "   ==================================   "
+tela1Linha25 : string "                                        "
 tela1Linha26 : string "                                        "
 tela1Linha27 : string "                                        "
 tela1Linha28 : string "========================================"
