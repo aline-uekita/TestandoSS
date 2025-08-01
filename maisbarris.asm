@@ -138,12 +138,12 @@ main:
 
         loadn r0, #1 ;onde inicia a frase
         loadn r1, #Msn1
-        loadn r2, #0 ;se quiser add cor 0 é nada
+        loadn r2, #10240 
         call ImprimeStr2
 
         loadn r0, #34 ;onde inicia a frase
         loadn r1, #Msn0
-        loadn r2, #0 ;se quiser add cor 0 é nada
+        loadn r2, #10240 ;se quiser add cor 0 é nada
         call ImprimeStr2
 
 
@@ -271,7 +271,6 @@ Inicializacao:
     loadn r0, #FlagCaindo       ;sempre é endereço, não flag
     loadn r2, #10               ;número de flags (como são de 0 - 4, se o r3 == 5, passou do número de flags existentes)
     loadn r1, #0                ;vai ser o 0 que zera as flags
-    store posAntSimoes, r1
     loadn r3, #0                ;contador para não passar o número de flags -> qual flag que é
     
     LoopFlagCaindo0:
@@ -782,6 +781,17 @@ Venceu:
 	loadn r2, #30720 		;cor roxa
 	call ImprimeTela
 
+    loadn r0, #1 ;onde inicia a frase
+    loadn r1, #Msn1 ;Score
+    loadn r2, #10240
+    call ImprimeStr2
+
+    load r0, Pontuacao
+    load r7, Bonus
+    add r0, r0, r7
+    loadn r7, #41
+    call ImprimeNumero
+
 	loadn r2, #0            ;inicializa o contador com 0 
 
     loadn r0, #'s'
@@ -855,6 +865,17 @@ Suicidou:
         loadn r1, #telaFinalPLinha0    ;endereco onde comeca a primeira linha do cenario
         loadn r2, #30720  			   ;cor roxa
         call ImprimeTela
+
+        loadn r0, #1 ;onde inicia a frase
+        loadn r1, #Msn1 ;Score
+        loadn r2, #10240
+        call ImprimeStr2
+
+        load r0, Pontuacao
+        load r7, Bonus
+        add r0, r0, r7
+        loadn r7, #41
+        call ImprimeNumero
 
         loadn r2, #0                   ;inicializa o contador com 0 
 
@@ -1181,6 +1202,17 @@ Morreu:
 	loadn r2, #30720  			    ;cor roxa
 	call ImprimeTela
 
+    loadn r0, #1 ;onde inicia a frase
+    loadn r1, #Msn1 ;Score
+    loadn r2, #10240
+    call ImprimeStr2
+
+    load r0, Pontuacao
+    load r7, Bonus
+    add r0, r0, r7
+    loadn r7, #41
+    call ImprimeNumero
+
 	loadn r2, #0                    ;inicializa o contador com 0 
 
     loadn r0, #'s'
@@ -1350,7 +1382,7 @@ ImprimeNumero:
     sub r0, r0, r6          ;r0 = unidade
 
     ;converte o número para tabela ascii
-    loadn r6, #'0'
+    loadn r6, #10288        ;cor 10240 + '0'
     add r2, r2, r6          ;dezenha de milhar
     add r3, r3, r6          ;milhar
     add r4, r4, r6          ;centena
