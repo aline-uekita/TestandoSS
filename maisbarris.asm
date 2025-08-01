@@ -96,7 +96,6 @@ Msn1: string "SCORE"
 Bonus: var #1
 
 Pontuacao: var #1
-    static Pontuacao + #0, #0
 
 ;Codigo principal
 main:
@@ -328,69 +327,7 @@ Placar:
     pop r7
     pop r0
     rts
-;--------------------------------------------
-;                   Placar
-;--------------------------------------------
-ImprimeNumero:
-    ;r0 = valor que vai ser imprimido
-    ;r7 = inicio da posição
-    push r1
-    push r2
-    push r3
-    push r4
-    push r5
-    push r6
 
-    ;dezena de milhar
-    loadn r1, #10000
-    div r2, r0, r1          ;r2 = dezena de milhar
-    mul r3, r2, r1
-    sub r0, r0, r3          ;r0 = resto
-
-    ;milhar
-    loadn r1, #1000
-    div r3, r0, r1          ;r3 = milhar
-    mul r4, r3, r1
-    sub r0, r0, r4          ;r0 = resto
-
-    ;centena
-    loadn r1, #100
-    div r4, r0, r1          ;r4 = centena
-    mul r5, r4, r1
-    sub r0, r0, r5          ;r0 = resto
-
-    ;dezena
-    loadn r1, #10
-    div r5, r0, r1          ;r5 = dezena
-    mul r6, r5, r1
-    sub r0, r0, r6          ;r0 = unidade
-
-    ;converte o número para tabela ascii
-    loadn r6, #'0'
-    add r2, r2, r6          ;dezenha de milhar
-    add r3, r3, r6          ;milhar
-    add r4, r4, r6          ;centena
-    add r5, r5, r6          ;dezena
-    add r0, r0, r6          ;unidade
-
-    ;imprime na tela
-    outchar r2, r7
-    inc r7
-    outchar r3, r7
-    inc r7
-    outchar r4, r7
-    inc r7
-    outchar r5, r7
-    inc r7
-    outchar r0, r7
-    
-    pop r6
-    pop r5
-    pop r4
-    pop r3
-    pop r2
-    pop r1
-    rts
 ;--------------------------------------------
 ;               MoveSimoes
 ;--------------------------------------------	
@@ -1376,6 +1313,70 @@ Delay:
         rts
 
 ;--------------------------------------------
+;               ImprimeNúmero
+;--------------------------------------------
+ImprimeNumero:
+    ;r0 = valor que vai ser imprimido
+    ;r7 = inicio da posição
+    push r1
+    push r2
+    push r3
+    push r4
+    push r5
+    push r6
+
+    ;dezena de milhar
+    loadn r1, #10000
+    div r2, r0, r1          ;r2 = dezena de milhar
+    mul r3, r2, r1
+    sub r0, r0, r3          ;r0 = resto
+
+    ;milhar
+    loadn r1, #1000
+    div r3, r0, r1          ;r3 = milhar
+    mul r4, r3, r1
+    sub r0, r0, r4          ;r0 = resto
+
+    ;centena
+    loadn r1, #100
+    div r4, r0, r1          ;r4 = centena
+    mul r5, r4, r1
+    sub r0, r0, r5          ;r0 = resto
+
+    ;dezena
+    loadn r1, #10
+    div r5, r0, r1          ;r5 = dezena
+    mul r6, r5, r1
+    sub r0, r0, r6          ;r0 = unidade
+
+    ;converte o número para tabela ascii
+    loadn r6, #'0'
+    add r2, r2, r6          ;dezenha de milhar
+    add r3, r3, r6          ;milhar
+    add r4, r4, r6          ;centena
+    add r5, r5, r6          ;dezena
+    add r0, r0, r6          ;unidade
+
+    ;imprime na tela
+    outchar r2, r7
+    inc r7
+    outchar r3, r7
+    inc r7
+    outchar r4, r7
+    inc r7
+    outchar r5, r7
+    inc r7
+    outchar r0, r7
+    
+    pop r6
+    pop r5
+    pop r4
+    pop r3
+    pop r2
+    pop r1
+    rts
+
+;--------------------------------------------
 ;             Imprime Tela
 ;--------------------------------------------
 ImprimeTela:
@@ -1588,24 +1589,24 @@ tela1Linha3  : string "              ()                        "
 tela1Linha4  : string "        ==================              "
 tela1Linha5  : string "                                        "
 tela1Linha6  : string "                                        "
-tela1Linha7  : string "   ==================================   "
-tela1Linha8  : string "                                        "
+tela1Linha7  : string "                                        "
+tela1Linha8  : string "   ==================================   "
 tela1Linha9  : string "                                        "
-tela1Linha10 : string "   ==================================   "
+tela1Linha10 : string "                                        "
 tela1Linha11 : string "                                        "
-tela1Linha12 : string "                                        "
-tela1Linha13 : string "   ==================================   "
+tela1Linha12 : string "   ==================================   "
+tela1Linha13 : string "                                        "
 tela1Linha14 : string "                                        "
 tela1Linha15 : string "                                        "
 tela1Linha16 : string "   ==================================   "
 tela1Linha17 : string "                                        "
 tela1Linha18 : string "                                        "
-tela1Linha19 : string "   ==================================   "
-tela1Linha20 : string "                                        "
+tela1Linha19 : string "                                        "
+tela1Linha20 : string "   ==================================   "
 tela1Linha21 : string "                                        "
-tela1Linha22 : string "   ==================================   "
+tela1Linha22 : string "                                        "
 tela1Linha23 : string "                                        "
-tela1Linha24 : string "                                        "
+tela1Linha24 : string "   ==================================   "
 tela1Linha25 : string "                                        "
 tela1Linha26 : string "                                        "
 tela1Linha27 : string "                                        "
@@ -1620,25 +1621,25 @@ tela2Linha3  : string "                                        "
 tela2Linha4  : string "                                        "
 tela2Linha5  : string "          - -                           "
 tela2Linha6  : string "          - -                           "
-tela2Linha7  : string "                                        "
-tela2Linha8  : string "                          - -           "
-tela2Linha9  : string "                          - -           "
-tela2Linha10 : string "                                        "
+tela2Linha7  : string "          - -                           "
+tela2Linha8  : string "                                        "
+tela2Linha9  : string "      - -                               "
+tela2Linha10 : string "      - -                               "
 tela2Linha11 : string "      - -                               "
-tela2Linha12 : string "      - -                               "
-tela2Linha13 : string "                                        "
+tela2Linha12 : string "                                        "
+tela2Linha13 : string "                                  - -   "
 tela2Linha14 : string "                                  - -   "
 tela2Linha15 : string "                                  - -   "
 tela2Linha16 : string "                                        "
 tela2Linha17 : string "                      - -               "
 tela2Linha18 : string "                      - -               "
-tela2Linha19 : string "                                        "
-tela2Linha20 : string "     - -                                "
-tela2Linha21 : string "     - -                                "
-tela2Linha22 : string "                                        "
+tela2Linha19 : string "                      - -               "
+tela2Linha20 : string "                                        "
+tela2Linha21 : string "                              - -       "
+tela2Linha22 : string "                              - -       "
 tela2Linha23 : string "                              - -       "
-tela2Linha24 : string "                              - -       "
-tela2Linha25 : string "                                        "
+tela2Linha24 : string "                                        "
+tela2Linha25 : string "   - -                                  "
 tela2Linha26 : string "   - -                                  "
 tela2Linha27 : string "   - -                                  "
 tela2Linha28 : string "                                        "
